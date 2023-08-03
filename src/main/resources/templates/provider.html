@@ -316,6 +316,10 @@
                 }
               });
           },
+          actionData(query, id) {
+            const form = document.querySelector(query);
+            form.setAttribute("data-action", id);
+          },
           update(id) {
             fetch(`/api/provider/${id}/notifiers`)
               .then((response) => response.json())
