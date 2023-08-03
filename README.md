@@ -2,6 +2,13 @@
 
 Watchdog! is a Spring Boot application designed to monitor the status of other services and send notifications to subscribers about service status updates. It provides the ability to send notifications via WhatsApp and Telegram, keeping users informed in real-time.
 
+<details>
+    <summary>Overview</summary>
+    ![Screenshot of watchdog interface](/screenshot/Screenshot_2023-08-03_09-26-00.png)
+    ![Screenshot of watchdog interface](/screenshot/Screenshot_2023-08-03_09-26-25.png)
+    ![Screenshot of watchdog interface](/screenshot/Screenshot_2023-08-03_09-25-11.png)
+</details>
+
 ## Features
 
 - Monitor Service Status: Watchdog! continuously checks the status of specified services.
