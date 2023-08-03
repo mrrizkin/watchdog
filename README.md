@@ -4,9 +4,9 @@ Watchdog! is a Spring Boot application designed to monitor the status of other s
 
 <details>
     <summary>Overview</summary>
-    ![Screenshot of watchdog interface](/screenshot/Screenshot_2023-08-03_09-26-00.png)
-    ![Screenshot of watchdog interface](/screenshot/Screenshot_2023-08-03_09-26-25.png)
-    ![Screenshot of watchdog interface](/screenshot/Screenshot_2023-08-03_09-25-11.png)
+    <img src="/screenshot/Screenshot_2023-08-03_09-26-00.png" alt="Screenshot of watchdog interface" />
+    <img src="/screenshot/Screenshot_2023-08-03_09-26-25.png" alt="Screenshot of watchdog interface" />
+    <img src="/screenshot/Screenshot_2023-08-03_09-25-11.png" alt="Screenshot of watchdog interface" />
 </details>
 
 ## Features
