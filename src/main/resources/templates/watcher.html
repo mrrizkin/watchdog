@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Watchdog</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.3/dist/cdn.min.js"></script>
+    <script defer src="/scripts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <h1><img src="/logo.webp" style="width: 50px" /> Watchdog!</h1>
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/service">Service</a></li>
+          <li><a href="/provider">Provider</a></li>
+          <li><a href="/watcher" class="active">Watcher</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <br />
+
+    <div class="space-between">
+      <span></span>
+      <button type="button" onclick="openModal(this)" target="add-watcher-modal">
+        <iconify-icon icon="heroicons:plus"></iconify-icon>
+      </button>
+    </div>
+
+    <br />
+
+    <div x-data>
+      <table>
+        <thead>
+          <tr>
+            <th>actions</th>
+            <th>name</th>
+            <th>phone number</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template x-for="(watcher, index) in $store.watchers.watchers">
+            <tr>
+              <td>
+                <button title="services" class="btn-sm" type="button" @click="$store.watchers.setCurrentWatch('#show-watcher-service-modal form', index);openModal($event.target)" target="show-watcher-service-modal">
+                  <iconify-icon icon="heroicons:cloud-solid" target="show-watcher-service-modal"></iconify-icon>
+                </button>
+                <button title="edit" class="btn-sm" type="button" @click="$store.watchers.assignForm('#edit-watcher-modal form', index);openModal($event.target)" target="edit-watcher-modal">
+                  <iconify-icon icon="heroicons:pencil-solid" target="edit-watcher-modal"></iconify-icon>
+                </button>
+                <button title="delete" class="btn-sm" type="button" @click="window.confirm('Are you sure you want to delete this watcher?') && $store.watchers.delete(watcher.id)">
+                  <iconify-icon icon="heroicons:trash-solid"></iconify-icon>
+                </button>
+              </td>
+              <td x-text="watcher.name"></td>
+              <td x-text="watcher.phoneNumber"></td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Modals -->
+    <dialog id="add-watcher-modal">
+      <header>
+        <div></div>
+        <div>Add Watcher</div>
+        <div>
+          <button class="btn-sm" type="button" onclick="closeModal(this)" target="add-watcher-modal">
+            <iconify-icon icon="heroicons:x-mark" target="add-watcher-modal"></iconify-icon>
+          </button>
+        </div>
+      </header>
+      <form action="/api/watcher" method="POST">
+        <div>
+          <label for="add-watcher-name">Name</label>
+          <input type="text" name="name" id="add-watcher-name" placeholder="Name" required />
+        </div>
+        <div>
+          <label for="add-watcher-url">Phone Number</label>
+          <input type="text" name="phoneNumber" id="add-watcher-url" placeholder="Phone number" required />
+        </div>
+        <br />
+        <button type="submit">Add Watcher</button>
+      </form>
+    </dialog>
+
+    <dialog id="edit-watcher-modal">
+      <header>
+        <div></div>
+        <div>Edit Watcher</div>
+        <div>
+          <button class="btn-sm" type="button" onclick="closeModal(this)" target="edit-watcher-modal">
+            <iconify-icon icon="heroicons:x-mark" target="edit-watcher-modal"></iconify-icon>
+          </button>
+        </div>
+      </header>
+      <form action="/api/watcher/{id}" method="PUT">
+        <div>
+          <label for="edit-watcher-name">Name</label>
+          <input type="text" name="name" id="edit-watcher-name" placeholder="Name" required />
+        </div>
+        <div>
+          <label for="edit-watcher-url">Phone Number</label>
+          <input type="text" name="phoneNumber" id="edit-watcher-url" placeholder="Phone number" required />
+        </div>
+        <br />
+        <button type="submit">Edit Watcher</button>
+      </form>
+    </dialog>
+
+    <dialog id="show-watcher-service-modal">
+      <header>
+        <div></div>
+        <div>Watcher Service</div>
+        <div>
+          <button class="btn-sm" type="button" onclick="closeModal(this)" target="show-watcher-service-modal">
+            <iconify-icon icon="heroicons:x-mark" target="edit-watcher-modal"></iconify-icon>
+          </button>
+        </div>
+      </header>
+      <div x-data>
+        <form action="/api/watcher/{id}/services" method="POST">
+          <table>
+            <thead>
+              <tr>
+                <th>name</th>
+                <th>url</th>
+                <th>status</th>
+                <th>watch</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template x-for="(service, index) in $store.watchers.services">
+                <tr>
+                  <input type="hidden" name="services[]" :value="service.id" />
+                  <td x-text="service.name"></td>
+                  <td>
+                    <a :href="service.url" x-text="service.url"></a>
+                  </td>
+                  <td>
+                    <template x-if="service.isDown">
+                      <span class="service-down"></span>
+                    </template>
+                    <template x-if="!service.isDown">
+                      <span class="service-up"></span>
+                    </template>
+                  </td>
+                  <td>
+                    <input type="checkbox" name="watch[]" :checked="service.isWatch" />
+                  </td>
+                </tr>
+              </template>
+              <template x-if="$store.watchers.services.length == 0">
+                <h2>No services found</h2>
+              </template>
+            </tbody>
+          </table>
+          <br />
+          <button type="submit">Save</button>
+        </form>
+      </div>
+    </dialog>
+    <!-- End Modals -->
+
+    <script>
+      document.addEventListener("alpine:init", () => {
+        Alpine.store("watchers", {
+          watchers: [],
+          services: [],
+          ogServices: [],
+          init() {
+            fetch("/api/watcher")
+              .then((response) => response.json())
+              .then((response) => {
+                this.watchers = response.data;
+                fetch("/api/services")
+                  .then((res) => res.json())
+                  .then((res) => {
+                    this.ogServices = res.data;
+                  });
+              });
+          },
+          setCurrentWatch(query, index) {
+            let services = this.ogServices;
+            const watcher = this.watchers[index];
+
+            services = services.map((service) => {
+              service.isWatch = false;
+              watcher.services.forEach((watcherService) => {
+                if (watcherService.id == service.id) {
+                  service.isWatch = true;
+                }
+              });
+              return service;
+            });
+
+            let form = document.querySelector(query);
+            form.setAttribute("data-action", watcher.id);
+
+            this.services = services;
+          },
+          assignForm(query, index) {
+            const watcher = this.watchers[index];
+            const form = document.querySelector(query);
+            form.reset();
+            for (const [key, value] of Object.entries(watcher)) {
+              if (key == "id" || key == "deleted") {
+                if (key == "id") {
+                  form.setAttribute("data-action", watcher.id);
+                }
+                continue;
+              }
+              const input = form.querySelector(`[name="${key}"]`);
+              if (input) {
+                input.value = value;
+              }
+            }
+          },
+          delete(id) {
+            fetch(`/api/watcher/${id}`, {
+              method: "DELETE",
+            })
+              .then((response) => response.json())
+              .then((response) => {
+                if (response.success) {
+                  this.watchers = this.watchers.filter(
+                    (watcher) => watcher.id != id
+                  );
+                }
+              });
+          },
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,91 @@
+.space-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.service-up,
+.service-down {
+    position: relative;
+}
+
+.service-up::before,
+.service-down::before {
+    content: "";
+    position: absolute;
+    top: 0.2rem;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+}
+
+.card.service-up::before,
+.card.service-down::before {
+    top: 0.5rem;
+    right: 0.5rem;
+}
+
+.service-up::before {
+    background: green;
+}
+
+.service-down::before {
+    background: red;
+}
+
+table {
+    table-layout: auto;
+}
+
+.btn-sm {
+    padding: 5px 10px;
+    margin: 0;
+}
+
+.site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-header ul {
+    display: flex;
+    list-style: none;
+    align-items: center;
+    gap: 1rem;
+}
+
+a.active {
+    font-weight: bold;
+    color: white;
+}
+
+h1 {
+    margin: 0;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+dialog > header:has(div) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+dialog > header:has(div) > div:nth-child(2) {
+    flex: 1;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-gap: 1rem;
+}
+
+.card {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: var(--background);
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+}

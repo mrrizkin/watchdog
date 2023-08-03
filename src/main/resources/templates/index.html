@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Watchdog</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.3/dist/cdn.min.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <h1><img src="/logo.webp" style="width: 50px" alt="logo" /> Watchdog!</h1>
+      <nav>
+        <ul>
+          <li><a href="/" class="active">Home</a></li>
+          <li><a href="/service">Service</a></li>
+          <li><a href="/provider">Provider</a></li>
+          <li><a href="/watcher">Watcher</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <br />
+
+    <div class="space-between">
+      <span></span>
+      <button style="float: right; margin: 0" type="button" onclick="location.reload()">
+        <iconify-icon icon="heroicons:arrow-path-rounded-square"></iconify-icon>
+      </button>
+    </div>
+
+    <br />
+
+    <div x-data>
+      <div class="card-grid">
+        <template x-for="service in $store.services.services" :key="service.id">
+          <div :class="'card' + (service.isDown ? ' service-down' : ' service-up')">
+            <h2 x-text="service.name"></h2>
+            <p x-text="service.url"></p>
+          </div>
+        </template>
+        <template x-if="$store.services.services.length == 0">
+          <h2>No services found</h2>
+        </template>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("alpine:init", () => {
+        Alpine.store("services", {
+          services: [],
+          init() {
+            fetch("/api/services")
+              .then((response) => response.json())
+              .then((response) => {
+                this.services = response.data;
+              });
+          },
+        });
+      });
+    </script>
+  </body>
+</html>
